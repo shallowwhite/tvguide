@@ -1,167 +1,62 @@
 ﻿using System;
 using System.Net;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.IO;
-using Newtonsoft.Json;
+using System.Xml;
 
 namespace TVGuide.App
 {
     class TVGuide
     {
-        private string authenticationToken = "";
-
         public TVGuide()
         {
-            // download tv listings for today
-            var data = getAuthenticationToken();
+            buildData();
         }
 
-        public List<TVGuideChannel> getChannels()
+        public List<TVGuideChannel> buildData()
         {
-            List<TVGuideChannel> result = new List<TVGuideChannel>();
-
-            /*var programs = getJSON(apiUrl);
-            string test = "";
-            foreach (Dictionary<string, object> program in programs)
+            string currentDate = DateTime.Now.ToShortDateString().Replace('/', '-');
+            string xmltvWebSource = "http://www.xmltv.co.uk/asset_xmltv.xml";
+            string xmltvSource = currentDate + ".xml";
+            
+            if (!File.Exists(xmltvSource))
             {
-                var show = program["show"] as Dictionary<string, object>;
-                var network = show["network"] as Dictionary<string, object>;
-                test += network["name"] as string + "\n";
-
-
-            }
-            MessageBox.Show(test);*/
-            return result; 
-        }
-
-        private string getTVData()
-        {
-            // download xmltv file
-            // convert to json
-
-        }
-
-        /**
-         * requestJSON()
-         */
-        private List<object> requestJSON(string url, string format = "application/json", string post = null)
-        {
-            try
-            {
-                // fetch tv listings json
-                var request = WebRequest.Create(url) as HttpWebRequest;
-                request.ContentType = "application/json";
-                
-                if (jsonPost != null)
+                using (var client = new WebClient())
                 {
-                    request.Method = "POST";
-                    using (var writer = new StreamWriter(request.GetRequestStream()))
-                    {
-                        writer.Write(jsonPost);
-                    }
-                }
-
-                using (var response = request.GetResponse() as HttpWebResponse)
-                {
-                    // check http request was successful
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        throw new Exception(String.Format(
-                            "Server error (HTTP {0}: {1}).",
-                            response.StatusCode,
-                            response.StatusDescription));
-                    }
-                    else
-                    {
-                        // read all data from http request
-                        using (var reader = new StreamReader(
-                            response.GetResponseStream(), System.Text.Encoding.UTF8))
-                        {
-                            return convertJSON(reader.ReadToEnd());
-                        }
-                    }
+                    client.DownloadFile(xmltvWebSource, xmltvSource);
                 }
             }
-            catch (Exception e)
+
+            List<TVGuideChannel> data = new List<TVGuideChannel>();
+
+            var xmltvDocument = new XmlDocument();
+            xmltvDocument.Load(xmltvSource);
+            var xmltvProgrammes = xmltvDocument.GetElementsByTagName("programme");
+            var xmltvChannels = xmltvDocument.GetElementsByTagName("channel");
+
+            for (int i = 0; i < xmltvChannels.Count; i++)
             {
-                MessageBox.Show(e.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }
-        }
+                string channelID = xmltvChannels[i].Attributes["id"].Value;
 
-        /**
-         * convertJSON()
-         * Utility function to convert json from a url to nested series of
-         * Lists and Dictionaries
-         */
-        private List<Object> convertJSON(string json)
-        {
-            // convert JSON object to a series of nested dictionaries
-            Func<string, List<object>> parseJSONArr = null;
-            Func<string, Dictionary<string, object>> parseJSONObj = null;
+                var channel = new TVGuideChannel();
+                channel.Name = xmltvChannels[i]["display-name"].InnerText;
 
-            parseJSONArr = (string jsonString) =>
-            {
-                var values = JsonConvert.DeserializeObject<List<object>>(jsonString);
-                var result = new List<object>();
-
-                foreach (object it in values)
+                /*for (int j = 0; j < xmltvProgrammes.Count; j++)
                 {
-                    if (it is Newtonsoft.Json.Linq.JObject)
-                    {
-                        result.Add(parseJSONObj(it.ToString()));
-                    }
-                    else if (it is Newtonsoft.Json.Linq.JArray)
-                    {
-                        result.Add(parseJSONArr(it.ToString()));
-                    }
-                    else
-                    {
-                        result.Add(it);
-                    }
-                }
+                    string programChannelID = xmltvProgrammes[j].Attributes["channel"].Value;
 
-                return result;
-            };
-            parseJSONObj = (string jsonString) =>
-            {
-                var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                var result = new Dictionary<string, object>();
+                    if (channelID == programChannelID)
+                    {
+                        var program = new TVGuideChannelProgram();
+                        program.Title = xmltvProgrammes[j]["title"].Value;
 
-                foreach (KeyValuePair<string, object> it in values)
-                {
-                    if (it.Value is Newtonsoft.Json.Linq.JObject)
-                    {
-                        result.Add(it.Key, parseJSONObj(it.Value.ToString()));
+                        channel.Programs.Add(program);
                     }
-                    else if (it.Value is Newtonsoft.Json.Linq.JArray)
-                    {
-                        result.Add(it.Key, parseJSONArr(it.Value.ToString()));
-                    }
-                    else
-                    {
-                        result.Add(it.Key, it.Value);
-                    }
-                }
-                return result;
-            };
-            json = json.Trim();
-            if (json[0] == '[') // check if root element is an array
-            {
-                // return list of objects
-                return parseJSONArr(json);
+                }*/
+                data.Add(channel);
             }
-            else
-            {
-                // return list with single object
-                List<object> result = new List<object>();
-                result.Add(parseJSONObj(json));
-                return result;
-            }
+
+            return data;
         }
     }
 }
