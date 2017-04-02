@@ -3,6 +3,9 @@ using System.Net;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Windows.Forms;
+using System.Text;
+
 
 namespace TVGuide.App
 {
@@ -54,9 +57,16 @@ namespace TVGuide.App
                     }
                 }*/
                 data.Add(channel);
-            }
+                
 
+            }
+            
             return data;
+
+            
+
+
         }
+        
     }
 }

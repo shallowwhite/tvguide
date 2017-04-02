@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TVGuide.App;
+using TVGuide;
+
 
 namespace TVGuide.App
 {
@@ -14,11 +17,14 @@ namespace TVGuide.App
     {
         private TVGuide tvGuide = new TVGuide();
 
+
         public TVGuideForm()
         {
             InitializeComponent();
         }
 
+        TVGuideChannel TVGuideChannel = new TVGuideChannel();
+        
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
@@ -44,6 +50,22 @@ namespace TVGuide.App
         {
             var preDlg = new PrintPreviewDialog();
             preDlg.ShowDialog();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void TVGuideForm_Load(object sender, EventArgs e)
+        {
+
+            MessageBox.Show(channel.Name);
         }
     }
 }

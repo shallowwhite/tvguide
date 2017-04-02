@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+
 
 namespace TVGuide.App
 {
@@ -17,6 +19,8 @@ namespace TVGuide.App
 
         public TVGuideChannel()
         {
+            
         }
+        
     }
 }
