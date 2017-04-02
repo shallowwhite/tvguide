@@ -25,12 +25,10 @@ namespace TVGuide.App
             string message = "";
             foreach (TVGuideChannel channel in channels)
             {
-                message += channel.Name + "\n";
+                message += channel.Name + "\t\t";
             }
-
-            MessageBox.Show(message);
-
-
+            //MessageBox.Show(message);
+            textBox1.Text = message;
         }
 
         TVGuideChannel TVGuideChannel = new TVGuideChannel();
@@ -66,11 +64,19 @@ namespace TVGuide.App
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {        
+        {
+            
+            
         }
 
         private void TVGuideForm_Load(object sender, EventArgs e)
         {
+            
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
