@@ -18,5 +18,32 @@ namespace TVGuide.App
         {
             InitializeComponent();
         }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void aboutToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Clean TV Guide\n A clean program by Adam Fearnehough and Steven Hunter", "Clean TV");
+        }
+
+        private void printToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var dlg = new PrintDialog();
+            dlg.ShowDialog();
+        }
+
+        private void printPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var preDlg = new PrintPreviewDialog();
+            preDlg.ShowDialog();
+        }
     }
 }
