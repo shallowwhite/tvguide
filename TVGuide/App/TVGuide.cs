@@ -44,28 +44,21 @@ namespace TVGuide.App
                 var channel = new TVGuideChannel();
                 channel.Name = xmltvChannels[i]["display-name"].InnerText;
 
-                /*for (int j = 0; j < xmltvProgrammes.Count; j++)
-                {
-                    string programChannelID = xmltvProgrammes[j].Attributes["channel"].Value;
+                //for (int j = 0; j < xmltvProgrammes.Count; j++)
+                //{
+                //    string programChannelID = xmltvProgrammes[j].Attributes["channel"].Value;
 
-                    if (channelID == programChannelID)
-                    {
-                        var program = new TVGuideChannelProgram();
-                        program.Title = xmltvProgrammes[j]["title"].Value;
+                //    if (channelID == programChannelID)
+                //    {
+                //        var program = new TVGuideChannelProgram();
+                //        program.Title = xmltvProgrammes[j]["title"].Value;
 
-                        channel.Programs.Add(program);
-                    }
-                }*/
-                data.Add(channel);
-                
-
-            }
-            
+                //        channel.Programs.Add(program);
+                //    }
+                //}
+                data.Add(channel);         
+            }         
             return data;
-
-            
-
-
         }
         
     }

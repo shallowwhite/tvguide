@@ -29,6 +29,8 @@ namespace TVGuide.App
             }
             //MessageBox.Show(message);
             textBox1.Text = message;
+
+
         }
 
         TVGuideChannel TVGuideChannel = new TVGuideChannel();
@@ -75,6 +77,11 @@ namespace TVGuide.App
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
 
         }
