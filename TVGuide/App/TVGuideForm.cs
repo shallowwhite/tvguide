@@ -21,13 +21,22 @@ namespace TVGuide.App
         public TVGuideForm()
         {
             InitializeComponent();
+            List<TVGuideChannel> channels = tvGuide.buildData();
+            string message = "";
+            foreach (TVGuideChannel channel in channels)
+            {
+                message += channel.Name + "\n";
+            }
+
+            MessageBox.Show(message);
+
+
         }
 
         TVGuideChannel TVGuideChannel = new TVGuideChannel();
         
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-
         }
 
         private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -54,18 +63,14 @@ namespace TVGuide.App
 
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
-           
+        {        
         }
 
         private void TVGuideForm_Load(object sender, EventArgs e)
         {
-
-            MessageBox.Show(channel.Name);
         }
     }
 }
